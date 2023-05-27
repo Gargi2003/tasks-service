@@ -10,5 +10,6 @@ func main() {
 	router := gin.Default()
 	router.POST("/tasks", handler.CreateTasks)
 	router.GET("/tasks/list", handler.ListTasks)
+	router.DELETE("/tasks/delete", handler.DeleteTask)
 	router.Run(":8081")
 }
