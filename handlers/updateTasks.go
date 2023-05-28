@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	utils "tasks/common"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
@@ -63,13 +64,21 @@ func EditTasks(c *gin.Context) {
 		} else {
 			updateQuery += " completed=false,"
 		}
+		// Add the updated_at field
+		updateQuery += " updated_at=? "
 
+		// Format the current time in the desired format
+		currentTime := time.Now().Format("2006-01-02 15:04:05")
+
+		// Append the updated_at parameter to the query parameters
+		queryParams = append(queryParams, currentTime)
 		// Remove the trailing comma from the query
 		updateQuery = updateQuery[:len(updateQuery)-1]
 
 		// Add the WHERE condition
 		updateQuery += " WHERE user_id=? and id=?"
 
+		utils.Logger.Info().Msg(updateQuery)
 		taskId := c.Query("id")
 		// Add the user ID parameter to the query parameters
 		queryParams = append(queryParams, userId, taskId)

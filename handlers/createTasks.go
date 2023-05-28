@@ -50,7 +50,7 @@ func CreateTasks(c *gin.Context) {
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
 		userId := claims["sub"]
 		//create the tasks
-		db.Query("insert into tasks (title, description, completed, created_at, updated_at, user_id) VALUES (?, ?, ?, ?, ?, ?)", req.Title, req.Description, req.Completed, time.Now(), time.Now(), userId)
+		db.Query("insert into tasks (title, description, completed, created_at, updated_at, user_id) VALUES (?, ?, ?, ?, ?, ?)", req.Title, req.Description, req.Completed, time.Now().Format("2006-01-02 15:04:05"), time.Now().Format("2006-01-02 15:04:05"), userId)
 	} else {
 		c.AbortWithStatus(http.StatusUnauthorized)
 	}

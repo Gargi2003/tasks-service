@@ -4,12 +4,13 @@ import (
 	"fmt"
 	"net/http"
 	utils "tasks/common"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
 )
 
-// lists down all tasks associated with the loggedin user
+// lists down all tasks associated with the logged-in user
 func ListTasks(c *gin.Context) {
 	tokenString, err := c.Cookie("Authorization")
 	if err != nil {
@@ -21,24 +22,35 @@ func ListTasks(c *gin.Context) {
 		}
 		return []byte(utils.SecretKey), nil
 	})
-	//connect to db
+	// Connect to the db
 	db, err := utils.DBConn(utils.Username, utils.Password, utils.Dbname, utils.Port)
 	if err != nil {
 		utils.Logger.Err(err).Msg("Couldn't establish db connection")
 	}
 	defer db.Close()
 	var tasks []utils.Task
-	//extract the user id associated with the current session
+	// Extract the user ID associated with the current session
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
 		userId := claims["sub"]
 
-		rows, err := db.Query("select id,title,description,completed,created_at,updated_at from tasks where user_id=?", userId)
+		rows, err := db.Query("SELECT id, title, description, completed, created_at, updated_at FROM tasks WHERE user_id=?", userId)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, "Error occurred while executing query")
+			return
 		}
+
 		for rows.Next() {
-			var task utils.Task
-			rows.Scan(&task.ID, &task.Title, &task.Description, &task.Completed, &task.CreatedAt, &task.UpdatedAt)
+			task := utils.Task{}
+			var createdAt, updatedAt string
+			err := rows.Scan(&task.ID, &task.Title, &task.Description, &task.Completed, &createdAt, &updatedAt)
+			if err != nil {
+				utils.Logger.Err(err).Msg("Error unmarshalling into struct from db")
+			}
+
+			// Parse the string values into time.Time
+			task.CreatedAt, _ = time.Parse("2006-01-02 15:04:05", createdAt)
+			task.UpdatedAt, _ = time.Parse("2006-01-02 15:04:05", updatedAt)
+
 			tasks = append(tasks, task)
 		}
 	} else {
