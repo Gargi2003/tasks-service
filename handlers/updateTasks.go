@@ -13,7 +13,14 @@ import (
 type EditRequest struct {
 	Title       string `json:"title"`
 	Description string `json:"description"`
-	Completed   bool   `json:"completed"`
+	Status      string `json:"status"`
+
+	IssueType   string `json:"issue_type"`
+	Assignee    string `json:"assignee"`
+	Sprint      string `json:"sprint"`
+	StoryPoints int    `json:"points"`
+	Reporter    string `json:"reporter"`
+	Comments    string `json:"comments"`
 }
 
 func EditTasks(c *gin.Context) {
@@ -58,12 +65,41 @@ func EditTasks(c *gin.Context) {
 			updateQuery += " description=?,"
 			queryParams = append(queryParams, req.Description)
 		}
-
-		if req.Completed {
-			updateQuery += " completed=true,"
-		} else {
-			updateQuery += " completed=false,"
+		if req.IssueType != "" {
+			updateQuery += " issue_type=?,"
+			queryParams = append(queryParams, req.IssueType)
 		}
+
+		if req.Assignee != "" {
+			updateQuery += " assignee=?,"
+			queryParams = append(queryParams, req.Assignee)
+		}
+
+		if req.Sprint != "" {
+			updateQuery += " sprint=?,"
+			queryParams = append(queryParams, req.Sprint)
+		}
+
+		if req.StoryPoints != 0 {
+			updateQuery += " points=?,"
+			queryParams = append(queryParams, req.StoryPoints)
+		}
+
+		if req.Reporter != "" {
+			updateQuery += " reporter=?,"
+			queryParams = append(queryParams, req.Reporter)
+		}
+
+		if req.Comments != "" {
+			updateQuery += " comments=?,"
+			queryParams = append(queryParams, req.Comments)
+		}
+
+		if req.Status != "" {
+			updateQuery += " status=?,"
+			queryParams = append(queryParams, req.Status)
+		}
+
 		// Add the updated_at field
 		updateQuery += " updated_at=? "
 

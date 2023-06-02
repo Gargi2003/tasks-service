@@ -14,10 +14,16 @@ type Task struct {
 	ID          int       `json:"id"`
 	Title       string    `json:"title"`
 	Description string    `json:"description"`
-	Completed   bool      `json:"completed"`
 	CreatedAt   time.Time `json:"created_at"`
 	UpdatedAt   time.Time `json:"updated_at"`
 	UserID      int       `json:"user_id"`
+	Status      string    `json:"status"`
+	IssueType   string    `json:"issue_type"`
+	Assignee    string    `json:"assignee"`
+	Sprint      string    `json:"sprint"`
+	StoryPoints int       `json:"points"`
+	Reporter    string    `json:"reporter"`
+	Comments    string    `json:"comments"`
 }
 
 const (
