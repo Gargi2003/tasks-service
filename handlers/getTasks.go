@@ -33,8 +33,9 @@ func ListTasks(c *gin.Context) {
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
 		userId := claims["sub"]
 
-		rows, err := db.Query("SELECT id, title, description, completed, created_at, updated_at FROM tasks WHERE user_id=?", userId)
+		rows, err := db.Query("SELECT id, title, description, created_at, updated_at, user_id, issue_type, assignee, sprint, points,reporter, comments, status FROM tasks WHERE user_id=?", userId)
 		if err != nil {
+			utils.Logger.Err(err).Msg("Error occurred while executing query")
 			c.JSON(http.StatusInternalServerError, "Error occurred while executing query")
 			return
 		}
@@ -42,7 +43,7 @@ func ListTasks(c *gin.Context) {
 		for rows.Next() {
 			task := utils.Task{}
 			var createdAt, updatedAt string
-			err := rows.Scan(&task.ID, &task.Title, &task.Description, &task.Completed, &createdAt, &updatedAt)
+			err := rows.Scan(&task.ID, &task.Title, &task.Description, &createdAt, &updatedAt, &task.UserID, &task.IssueType, &task.Assignee, &task.Sprint, &task.StoryPoints, &task.Reporter, &task.Comments, &task.Status)
 			if err != nil {
 				utils.Logger.Err(err).Msg("Error unmarshalling into struct from db")
 			}
