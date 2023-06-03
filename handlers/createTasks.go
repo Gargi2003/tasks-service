@@ -17,7 +17,8 @@ type CreateRequest struct {
 
 	IssueType   string `json:"issue_type"`
 	Assignee    string `json:"assignee"`
-	Sprint      string `json:"sprint"`
+	Sprint      int    `json:"sprint_id"`
+	ProjectId   int    `json:"project_id"`
 	StoryPoints int    `json:"points"`
 	Reporter    string `json:"reporter"`
 	Comments    string `json:"comments"`
@@ -57,7 +58,7 @@ func CreateTasks(c *gin.Context) {
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
 		userId := claims["sub"]
 		//create the tasks
-		db.Query("insert into tasks (title, description, created_at, updated_at, user_id, issue_type, assignee, sprint, points,reporter, comments, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", req.Title, req.Description, time.Now().Format("2006-01-02 15:04:05"), time.Now().Format("2006-01-02 15:04:05"), userId, req.IssueType, req.Assignee, req.Sprint, req.StoryPoints, req.Reporter, req.Comments, req.Status)
+		db.Query("insert into tasks (title, description, created_at, updated_at, user_id, issue_type, assignee, sprint_id, project_id, points, reporter, comments, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", req.Title, req.Description, time.Now().Format("2006-01-02 15:04:05"), time.Now().Format("2006-01-02 15:04:05"), userId, req.IssueType, req.Assignee, req.Sprint, req.ProjectId, req.StoryPoints, req.Reporter, req.Comments, req.Status)
 	} else {
 		c.AbortWithStatus(http.StatusUnauthorized)
 	}
