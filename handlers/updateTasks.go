@@ -17,7 +17,8 @@ type EditRequest struct {
 
 	IssueType   string `json:"issue_type"`
 	Assignee    string `json:"assignee"`
-	Sprint      string `json:"sprint"`
+	Sprint      int    `json:"sprint_id"`
+	ProjectId   int    `json:"project_id"`
 	StoryPoints int    `json:"points"`
 	Reporter    string `json:"reporter"`
 	Comments    string `json:"comments"`
@@ -75,9 +76,13 @@ func EditTasks(c *gin.Context) {
 			queryParams = append(queryParams, req.Assignee)
 		}
 
-		if req.Sprint != "" {
-			updateQuery += " sprint=?,"
+		if req.Sprint != 0 {
+			updateQuery += " sprint_id=?,"
 			queryParams = append(queryParams, req.Sprint)
+		}
+		if req.ProjectId != 0 {
+			updateQuery += " project_id=?,"
+			queryParams = append(queryParams, req.ProjectId)
 		}
 
 		if req.StoryPoints != 0 {

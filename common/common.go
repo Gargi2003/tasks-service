@@ -20,7 +20,8 @@ type Task struct {
 	Status      string    `json:"status"`
 	IssueType   string    `json:"issue_type"`
 	Assignee    string    `json:"assignee"`
-	Sprint      string    `json:"sprint"`
+	Sprint      int       `json:"sprint_id"`
+	ProjectId   int       `json:"project_id"`
 	StoryPoints int       `json:"points"`
 	Reporter    string    `json:"reporter"`
 	Comments    string    `json:"comments"`
