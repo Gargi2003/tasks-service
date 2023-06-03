@@ -49,8 +49,8 @@ func ListTasks(c *gin.Context) {
 			}
 
 			// Parse the string values into time.Time
-			task.CreatedAt, _ = time.Parse("2006-01-02 15:04:05", createdAt)
-			task.UpdatedAt, _ = time.Parse("2006-01-02 15:04:05", updatedAt)
+			task.CreatedAt, _ = time.Parse("2006-01-02", createdAt)
+			task.UpdatedAt, _ = time.Parse("2006-01-02", updatedAt)
 
 			tasks = append(tasks, task)
 		}
