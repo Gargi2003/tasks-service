@@ -2,8 +2,10 @@ package handlers
 
 import (
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	utils "tasks/common"
+	service "tasks/service"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -57,8 +59,27 @@ func CreateTasks(c *gin.Context) {
 	//extract the user id associated with the current session
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
 		userId := claims["sub"]
+		url := fmt.Sprint("http://localhost:8080/get?id=", userId)
+		response, err := http.Get(url)
+		if err != nil {
+			utils.Logger.Err(err).Msg("Error calling users API")
+		}
+		defer response.Body.Close()
+		body, err := ioutil.ReadAll(response.Body)
+		if err != nil {
+			utils.Logger.Err(err).Msg("Error reading response body")
+		}
+		username := string(body)
+		//introduce check to see if user creating the task
+		//is creating the task for him or someone else
+		//if someone else then send email to the assignee
+		if username != req.Assignee {
+			// Send email to the assignee
+			service.SendEmail()
+		}
 		//create the tasks
 		db.Query("insert into tasks (title, description, created_at, updated_at, user_id, issue_type, assignee, sprint_id, project_id, points, reporter, comments, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", req.Title, req.Description, time.Now().Format("2006-01-02 15:04:05"), time.Now().Format("2006-01-02 15:04:05"), userId, req.IssueType, req.Assignee, req.Sprint, req.ProjectId, req.StoryPoints, req.Reporter, req.Comments, req.Status)
+
 	} else {
 		c.AbortWithStatus(http.StatusUnauthorized)
 	}
