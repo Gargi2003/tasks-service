@@ -48,9 +48,8 @@ func ListTasks(c *gin.Context) {
 				utils.Logger.Err(err).Msg("Error unmarshalling into struct from db")
 			}
 
-			// Parse the string values into time.Time
-			task.CreatedAt, _ = time.Parse("2006-01-02", createdAt)
-			task.UpdatedAt, _ = time.Parse("2006-01-02", updatedAt)
+			task.CreatedAt, _ = time.Parse("2006-01-02 15:04:05", createdAt)
+			task.UpdatedAt, _ = time.Parse("2006-01-02 15:04:05", updatedAt)
 
 			tasks = append(tasks, task)
 		}
