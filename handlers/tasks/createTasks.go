@@ -59,7 +59,7 @@ func CreateTasks(c *gin.Context) {
 	//extract the user id associated with the current session
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
 		userId := claims["sub"]
-		url := fmt.Sprint("http://localhost:8080/get?id=", userId)
+		url := fmt.Sprint("http://localhost:8080/users/get?id=", userId)
 		response, err := http.Get(url)
 		if err != nil {
 			utils.Logger.Err(err).Msg("Error calling users API")
@@ -75,8 +75,7 @@ func CreateTasks(c *gin.Context) {
 		//if someone else then send email to the assignee
 		if username != req.Assignee {
 			// Send email to the assignee
-			service.SendEmail(req)
-			fmt.Println("This is req: ", req)
+			service.SendEmail(req, nil, nil)
 		}
 		//create the tasks
 		db.Query("insert into tasks (title, description, created_at, updated_at, user_id, issue_type, assignee, sprint_id, project_id, points, reporter, comments, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", req.Title, req.Description, time.Now().Format("2006-01-02 15:04:05"), time.Now().Format("2006-01-02 15:04:05"), userId, req.IssueType, req.Assignee, req.Sprint, req.ProjectId, req.StoryPoints, req.Reporter, req.Comments, req.Status)

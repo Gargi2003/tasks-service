@@ -1,0 +1,43 @@
+.container {
+    border-radius: 5px;
+    border: 2px solid rgb(209, 209, 209);
+    padding: 10px;
+    width: 90%;
+}
+
+.container p {
+    margin: 0;
+}
+
+.container p a {
+    padding-right: 10px;
+}
+
+.container p img {
+    height: 15px;
+    width: 17px;
+    padding-right: 1px;
+    padding-left: 10px;
+}
+
+.container h2 {
+    margin: 0;
+}
+
+.container h3 {
+    margin: 0;
+}
+
+.grid {
+    display: flex;
+    align-items: center;
+}
+
+.grid img {
+    border-radius: 50%;
+}
+
+.assignee {
+    background-color: #affdad;
+    width: 150px;
+}

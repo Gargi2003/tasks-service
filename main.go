@@ -13,6 +13,7 @@ func main() {
 	//tasks api
 	router.POST("/tasks", taskhandler.CreateTasks)
 	router.GET("/tasks/list", taskhandler.ListTasks)
+	router.GET("/tasks/get", taskhandler.GetTask)
 	router.DELETE("/tasks/delete", taskhandler.DeleteTask)
 	router.PUT("/tasks/edit", taskhandler.EditTasks)
 
