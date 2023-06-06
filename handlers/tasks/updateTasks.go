@@ -1,9 +1,11 @@
 package handlers
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	utils "tasks/common"
+	"tasks/service"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -14,7 +16,6 @@ type EditRequest struct {
 	Title       string `json:"title"`
 	Description string `json:"description"`
 	Status      string `json:"status"`
-
 	IssueType   string `json:"issue_type"`
 	Assignee    string `json:"assignee"`
 	Sprint      int    `json:"sprint_id"`
@@ -52,7 +53,16 @@ func EditTasks(c *gin.Context) {
 
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
 		userId := claims["sub"]
+		taskId := c.Query("id")
 
+		// Fetch the task before the update
+		previousTask, err := GetTaskByID(c, taskId)
+		if err != nil {
+			utils.Logger.Err(err).Msg("Error fetching previous task")
+			c.JSON(http.StatusInternalServerError, "Error fetching previous task")
+			return
+		}
+		// service.SendEmail(&req, previousResponse)
 		// Build the update query dynamically based on non-empty fields
 		updateQuery := "UPDATE tasks SET"
 		var queryParams []interface{}
@@ -120,20 +130,76 @@ func EditTasks(c *gin.Context) {
 		updateQuery += " WHERE user_id=? and id=?"
 
 		utils.Logger.Info().Msg(updateQuery)
-		taskId := c.Query("id")
+
 		// Add the user ID parameter to the query parameters
 		queryParams = append(queryParams, userId, taskId)
 
 		// Execute the update query
-		_, err := db.Query(updateQuery, queryParams...)
-		if err != nil {
-			utils.Logger.Err(err).Msg("Error executing update query")
+		_, err1 := db.Query(updateQuery, queryParams...)
+		if err1 != nil {
+			utils.Logger.Err(err1).Msg("Error executing update query")
 			c.JSON(http.StatusInternalServerError, "Error updating tasks")
 			return
 		}
+
+		// Fetch the updated task
+		updatedTask, err := GetTaskByID(c, taskId)
+		if err != nil {
+			utils.Logger.Err(err).Msg("Error fetching updated task")
+			c.JSON(http.StatusInternalServerError, "Error fetching updated task")
+			return
+		}
+
+		// Send email with updated and previous tasks
+		service.SendEmail(&req, previousTask, updatedTask)
 	} else {
 		c.AbortWithStatus(http.StatusUnauthorized)
 	}
 	// Handle the response
 	c.JSON(http.StatusOK, "Tasks updated successfully")
+}
+
+func GetTaskByID(c *gin.Context, taskID string) (*utils.PreviousResponse, error) {
+
+	//get the jwt token from the cookie
+	tokenString, err := c.Cookie("Authorization")
+	if err != nil {
+		utils.Logger.Err(err).Msg("Error getting token")
+		c.AbortWithStatus(http.StatusUnauthorized)
+	}
+	//parse the token and validate it
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
+		}
+		return []byte(utils.SecretKey), nil
+	})
+	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+		userId := claims["sub"]
+		apiURL := fmt.Sprintf("http://localhost:8081/tasks/get?userid=%s&taskid=%s", userId, taskID)
+
+		response, err := http.Get(apiURL)
+		if err != nil {
+			utils.Logger.Err(err).Msg("Error calling users API")
+		}
+		defer response.Body.Close()
+
+		if err != nil {
+			return nil, err
+		}
+		defer response.Body.Close()
+
+		if response.StatusCode != http.StatusOK {
+			return nil, fmt.Errorf("API request failed with status: %d", response.StatusCode)
+		}
+
+		var task utils.PreviousResponse
+		err = json.NewDecoder(response.Body).Decode(&task)
+		if err != nil {
+			return nil, err
+		}
+		return &task, nil
+	}
+
+	return nil, nil
 }

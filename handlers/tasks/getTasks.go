@@ -59,3 +59,50 @@ func ListTasks(c *gin.Context) {
 
 	c.JSON(http.StatusOK, tasks)
 }
+
+// Fetches a task by userId and taskId
+func GetTask(c *gin.Context) {
+	// tokenString, err := c.Cookie("Authorization")
+	// if err != nil {
+	// 	c.AbortWithStatus(http.StatusUnauthorized)
+	// }
+	// token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+	// 	if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+	// 		return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
+	// 	}
+	// 	return []byte(utils.SecretKey), nil
+	// })
+	// Connect to the db
+	db, err := utils.DBConn(utils.Username, utils.Password, utils.Dbname, utils.Port)
+	if err != nil {
+		utils.Logger.Err(err).Msg("Couldn't establish db connection")
+	}
+	defer db.Close()
+	// fmt.Println("token", token)
+	// if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+	// userId := claims["sub"]
+	taskId := c.Query("taskid")
+	userId := c.Query("userid")
+	fmt.Println("taskid: ", taskId)
+	fmt.Println("userid: ", userId)
+	row := db.QueryRow("SELECT id, title, description, created_at, updated_at, user_id, issue_type, assignee, sprint_id, project_id, points, reporter, comments, status FROM tasks WHERE user_id=? AND id=?", userId, taskId)
+
+	task := utils.Task{}
+	var createdAt, updatedAt string
+	err1 := row.Scan(&task.ID, &task.Title, &task.Description, &createdAt, &updatedAt, &task.UserID, &task.IssueType, &task.Assignee, &task.Sprint, &task.ProjectId, &task.StoryPoints, &task.Reporter, &task.Comments, &task.Status)
+	if err1 != nil {
+
+		utils.Logger.Err(err1).Msg("Error occurred while executing query")
+		c.JSON(http.StatusInternalServerError, "Error occurred while executing query")
+
+		return
+	}
+
+	task.CreatedAt, _ = time.Parse("2006-01-02 15:04:05", createdAt)
+	task.UpdatedAt, _ = time.Parse("2006-01-02 15:04:05", updatedAt)
+
+	c.JSON(http.StatusOK, task)
+	// } else {
+	// 	c.AbortWithStatus(http.StatusUnauthorized)
+	// }
+}
