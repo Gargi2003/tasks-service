@@ -62,7 +62,6 @@ func EditTasks(c *gin.Context) {
 			c.JSON(http.StatusInternalServerError, "Error fetching previous task")
 			return
 		}
-		// service.SendEmail(&req, previousResponse)
 		// Build the update query dynamically based on non-empty fields
 		updateQuery := "UPDATE tasks SET"
 		var queryParams []interface{}
@@ -149,9 +148,9 @@ func EditTasks(c *gin.Context) {
 			c.JSON(http.StatusInternalServerError, "Error fetching updated task")
 			return
 		}
-
 		// Send email with updated and previous tasks
-		service.SendEmail(&req, previousTask, updatedTask)
+		service.SendEmailForUpdatedIssue(previousTask, updatedTask)
+
 	} else {
 		c.AbortWithStatus(http.StatusUnauthorized)
 	}

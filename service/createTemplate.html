@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+    <p>This issue is now <strong
+            style="background-color: rgb(119, 3, 226);padding: 2px; color:white; border-radius:5px">created</strong>
+    </p>
+    <p>This issue is now <strong>assigned to you</strong></p>
+    <div style="border-radius:5px;border: 2px solid rgb(209, 209, 209); padding: 10px; width: 90%;">
+        <p><a style="padding-right: 10px;" href="http://localhost:4200"> DUMMY </a> / <img
+                style="height:15px;width:17px;padding-right: 1px;padding-left: 10px;"
+                src="https://i.postimg.cc/htWm6Khw/defect.jpg"><a href="http://localhost:4200">DUM-{{.ProjectID}}</a> <a
+                style="list-style: none; text-decoration: none; background-color:  rgb(209, 209, 209);border-radius:5px;padding: 2px;margin-left: 10px;">{{.Status}}</a>
+        </p>
+        <h2><strong>{{.Description}}</strong></h2>
+        <p><a style="padding-right: 10px;" href="http://localhost:4200">View issue</a> . <a style="padding-left: 10px;"
+                href="http://localhost:4200">Add Comment</a></p>
+        <br>
+        <h2>Issue created</h2>
+
+        <div style="padding: 10px;">
+            <div style="display: flex; align-items: center; justify-content: center;">
+                <img src="https://i.postimg.cc/mgTTnnNR/people-6.png" width="50" height="50"
+                    style="border-radius:50%;padding-right: 3px;">
+                <p>
+                    Changes by <strong>{{.Reporter}}</strong> on
+                    {{.Timestamp.Format "2006-01-02 15:04:05"}}
+                </p>
+            </div>
+            <div style="padding-left: 50px; font-size: 13px;">
+                <div style="display: flex; margin-bottom: 0; line-height: 0;">
+                    <p style="color: rgb(131, 131, 131); padding-right: 10px;">Title:</p>
+                    <p>{{.Title}}</p>
+                </div>
+                <div style="display: flex; margin-bottom: 0;">
+                    <p style="color: rgb(131, 131, 131); padding-right: 10px;">Summary: </p>
+                    <p>{{.Description}}</p>
+
+                </div>
+                <div style="display: flex; margin-bottom: 0; line-height: 0;">
+                    <p style="color: rgb(131, 131, 131); padding-right: 10px;">Status: </p>
+
+                    <p>{{.Status}}</p>
+                </div>
+                <div style="display: flex;">
+                    <p style="color: rgb(131, 131, 131); padding-right: 10px;">Issue Type: </p>
+                    <p><img
+                        style="height:15px;width:17px;"
+                        src="https://i.postimg.cc/htWm6Khw/defect.jpg"><a href="http://localhost:4200">{{.IssueType}}</p>
+                </div>
+                <div style="display: flex; margin-bottom: 0; line-height: 0;">
+                    <p style="color: rgb(131, 131, 131); padding-right: 10px;">Sprint: </p>
+
+                    <p>{{.Sprint}}</p>
+                </div>
+                <div style="display: flex; margin-bottom: 0; line-height: 0;">
+                    <p style="color: rgb(131, 131, 131); padding-right: 10px;">Story Points: </p>
+
+                    <p>{{.Points}}</p>
+                </div>
+                <div style="display: flex; margin-bottom: 0; line-height: 0;">
+                    <p style="color: rgb(131, 131, 131); padding-right: 10px;">Reporter: </p>
+
+                    <p>{{.Reporter}}</p>
+                </div>
+                
+                <div style="display: flex; margin-bottom: 0; line-height: 0;">
+                    <p style="color: rgb(131, 131, 131);padding-right: 10px;">Assignee: </p>
+
+                    <p>{{.Assignee}}</p>
+                </div>
+                <div style="display: flex; margin-bottom: 0;">
+                    <p style="color: rgb(131, 131, 131); padding-right: 10px;">Comments: </p>
+                        <p>{{.Comments}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

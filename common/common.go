@@ -11,20 +11,23 @@ import (
 )
 
 type PreviousResponse struct {
-	ID          int       `json:"id"`
-	Title       string    `json:"title"`
-	Description string    `json:"description"`
-	CreatedAt   time.Time `json:"created_at"`
-	UpdatedAt   time.Time `json:"updated_at"`
-	UserID      int       `json:"user_id"`
-	IssueType   string    `json:"issue_type"`
-	Assignee    string    `json:"assignee"`
-	Sprint      int       `json:"sprint_id"`
-	ProjectID   int       `json:"project_id"`
-	Points      int       `json:"points"`
-	Reporter    string    `json:"reporter"`
-	Comments    string    `json:"comments"`
-	Status      string    `json:"status"`
+	ID             int    `json:"id"`
+	Title          string `json:"title"`
+	Description    string `json:"description"`
+	Count          int
+	PreviousFields map[string]interface{}
+	Timestamp      time.Time
+	CreatedAt      time.Time `json:"created_at"`
+	UpdatedAt      time.Time `json:"updated_at"`
+	UserID         int       `json:"user_id"`
+	IssueType      string    `json:"issue_type"`
+	Assignee       string    `json:"assignee"`
+	Sprint         int       `json:"sprint_id"`
+	ProjectID      int       `json:"project_id"`
+	Points         int       `json:"points"`
+	Reporter       string    `json:"reporter"`
+	Comments       string    `json:"comments"`
+	Status         string    `json:"status"`
 }
 type Task struct {
 	ID          int       `json:"id"`
