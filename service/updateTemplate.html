@@ -2,12 +2,11 @@
 <html>
 
 <body>
-    <p>There was <strong>1 update</strong></p>
-    <p>This issue is now <strong>assigned to you</strong></p>
+    <p>There was <strong>{{.Count}}</strong></p>
     <div style="border-radius:5px;border: 2px solid rgb(209, 209, 209); padding: 10px; width: 90%;">
         <p><a style="padding-right: 10px;" href="http://localhost:4200"> DUMMY </a> / <img
                 style="height:15px;width:17px;padding-right: 1px;padding-left: 10px;"
-                src="https://i.postimg.cc/htWm6Khw/defect.jpg"><a href="http://localhost:4200">DUM-{{.ProjectId}}</a> <a
+                src="https://i.postimg.cc/htWm6Khw/defect.jpg"><a href="http://localhost:4200">DUM-{{.ProjectID}}</a> <a
                 style="list-style: none; text-decoration: none; background-color:  rgb(209, 209, 209);padding: 2px;margin-left: 10px;">{{.Status}}</a>
         </p>
         <h2><strong>{{.Description}}</strong></h2>
