@@ -10,7 +10,7 @@ import (
 	"github.com/rs/zerolog"
 )
 
-type PreviousResponse struct {
+type UpdateResponse struct {
 	ID             int    `json:"id"`
 	Title          string `json:"title"`
 	Description    string `json:"description"`

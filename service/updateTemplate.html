@@ -1,32 +1,84 @@
 <!DOCTYPE html>
 <html>
 
+<head>
+    <style>
+        .previous {
+            background-color: #ffcccc;
+            text-decoration: line-through;
+        }
+
+        .updated {
+            background-color: #ccffcc;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+    </style>
+</head>
+
 <body>
-    <p>There was <strong>{{.Count}}</strong></p>
-    <div style="border-radius:5px;border: 2px solid rgb(209, 209, 209); padding: 10px; width: 90%;">
-        <p><a style="padding-right: 10px;" href="http://localhost:4200"> DUMMY </a> / <img
-                style="height:15px;width:17px;padding-right: 1px;padding-left: 10px;"
-                src="https://i.postimg.cc/htWm6Khw/defect.jpg"><a href="http://localhost:4200">DUM-{{.ProjectID}}</a> <a
-                style="list-style: none; text-decoration: none; background-color:  rgb(209, 209, 209);padding: 2px;margin-left: 10px;">{{.Status}}</a>
+    {{ if eq .Count 1 }}
+    <p>There was <strong>1</strong> update</p>
+    {{ else }}
+    <p>There were <strong>{{ .Count }}</strong> updates</p>
+    {{ end }}
+
+    <!-- <p>There was <strong>{{.Count}}</strong> update(s).</p> -->
+    <div style="border-radius: 5px; border: 2px solid rgb(209, 209, 209); padding: 10px; width: 90%;">
+        <p>
+            <a style="padding-right: 10px;" href="http://localhost:4200"> DUMMY </a>
+            / <img style="height: 15px; width: 17px; padding-right: 1px; padding-left: 10px;"
+                src="https://i.postimg.cc/htWm6Khw/defect.jpg">
+            <a href="http://localhost:4200">DUM-{{.ProjectID}}</a>
+            <a
+                style="list-style: none; text-decoration: none; background-color:  rgb(209, 209, 209); padding: 2px; margin-left: 10px;">{{.Status}}</a>
         </p>
         <h2><strong>{{.Description}}</strong></h2>
-        <p><a style="padding-right: 10px;" href="http://localhost:4200">View issue</a> . <a style="padding-left: 10px;"
-                href="http://localhost:4200">Add Comment</a></p>
-        <h3>{{.Count}} Update</h3>
+        <p>
+            <a style="padding-right: 10px;" href="http://localhost:4200">View issue</a>
+            .
+            <a style="padding-left: 10px;" href="http://localhost:4200">Add Comment</a>
+        </p>
+        {{ if eq .Count 1 }}
+        <h3>1 Update</h3>
+        {{ else }}
+        <h3>{{.Count}} Updates</h3>
+        {{ end }}
 
 
         <div style="display: flex; align-items: center; justify-content: center;">
             <img src="https://i.postimg.cc/mgTTnnNR/people-6.png" width="50" height="50"
                 style="border-radius:50%;padding-right: 3px;">
-            <p >Changes by
-                <strong>{{.Reporter}}</strong> on
-                <br><br>
+            <p>
+                Changes by <strong>{{.Reporter}}</strong> on
                 {{.Timestamp.Format "2006-01-02 15:04:05"}}
             </p>
         </div>
 
-        <p style="background-color:#affdad;width:150px;">Assignee: {{.Assignee}}</p>
+
+        <div style="margin-top: 20px;">
+            <ul>
+                {{ range $key, $value := .PreviousFields }}
+                <li>
+                    {{ $key }}
+                    <span class="previous">{{ $value.Previous }}</span>
+                    <!-- &#8594; -->
+                    <span class="updated">{{ $value.Updated }}</span>
+                </li>
+                {{ end }}
+            </ul>
+            <!-- <ul>
+                {{ range $key, $value := .PreviousFields }}
+                    <li>{{ $key }}: {{ $value.Previous }} &#8594; {{ $value.Updated }}</li>
+                {{ end }}
+            </ul> -->
+        </div>
     </div>
+
 </body>
 
 </html>

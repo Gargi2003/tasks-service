@@ -158,7 +158,7 @@ func EditTasks(c *gin.Context) {
 	c.JSON(http.StatusOK, "Tasks updated successfully")
 }
 
-func GetTaskByID(c *gin.Context, taskID string) (*utils.PreviousResponse, error) {
+func GetTaskByID(c *gin.Context, taskID string) (*utils.UpdateResponse, error) {
 
 	//get the jwt token from the cookie
 	tokenString, err := c.Cookie("Authorization")
@@ -192,7 +192,7 @@ func GetTaskByID(c *gin.Context, taskID string) (*utils.PreviousResponse, error)
 			return nil, fmt.Errorf("API request failed with status: %d", response.StatusCode)
 		}
 
-		var task utils.PreviousResponse
+		var task utils.UpdateResponse
 		err = json.NewDecoder(response.Body).Decode(&task)
 		if err != nil {
 			return nil, err
