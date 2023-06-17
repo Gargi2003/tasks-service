@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"database/sql"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -11,20 +12,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
 )
-
-type CreateRequest struct {
-	Title       string `json:"title"`
-	Description string `json:"description"`
-	Status      string `json:"status"`
-
-	IssueType   string `json:"issue_type"`
-	Assignee    string `json:"assignee"`
-	Sprint      int    `json:"sprint_id"`
-	ProjectId   int    `json:"project_id"`
-	StoryPoints int    `json:"points"`
-	Reporter    string `json:"reporter"`
-	Comments    string `json:"comments"`
-}
 
 func CreateTasks(c *gin.Context) {
 
@@ -43,7 +30,7 @@ func CreateTasks(c *gin.Context) {
 	})
 
 	//bind the request to the struct
-	var req CreateRequest
+	var req utils.Task
 	if err := c.BindJSON(&req); err != nil {
 		utils.Logger.Err(err).Msg("Error binding req object")
 		c.JSON(http.StatusInternalServerError, "Error binding req object")
@@ -78,8 +65,26 @@ func CreateTasks(c *gin.Context) {
 			service.SendEmailForCreatedIssue(req)
 		}
 		//create the tasks
-		db.Query("insert into tasks (title, description, created_at, updated_at, user_id, issue_type, assignee, sprint_id, project_id, points, reporter, comments, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", req.Title, req.Description, time.Now().Format("2006-01-02 15:04:05"), time.Now().Format("2006-01-02 15:04:05"), userId, req.IssueType, req.Assignee, req.Sprint, req.ProjectId, req.StoryPoints, req.Reporter, req.Comments, req.Status)
-
+		var result sql.Result
+		if result, err = db.Exec("insert into tasks (title, description, created_at, updated_at, user_id, issue_type, assignee, sprint_id, project_id, points, reporter, comments, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", req.Title, req.Description, time.Now().Format("2006-01-02 15:04:05"), time.Now().Format("2006-01-02 15:04:05"), userId, req.IssueType, req.Assignee, req.Sprint, req.ProjectID, req.Points, req.Reporter, req.Comments, req.Status); err != nil {
+			utils.Logger.Err(err).Msg("Error inserting data into tasks table")
+			c.JSON(http.StatusInternalServerError, "Error inserting data into tasks table")
+			return
+		}
+		lastInsertId, err := result.LastInsertId()
+		if err != nil {
+			utils.Logger.Err(err).Msg("Error retrieving last inserted ID")
+			c.JSON(http.StatusInternalServerError, "Error retrieving last inserted ID")
+			return
+		}
+		req.CreatedAt, _ = time.Parse("2006-01-02 15:04:05", time.Now().Format("2006-01-02 15:04:05"))
+		req.UpdatedAt, _ = time.Parse("2006-01-02 15:04:05", time.Now().Format("2006-01-02 15:04:05"))
+		taskId := fmt.Sprintf("%d", lastInsertId)
+		if err := utils.UpdateAudit(nil, &req, userId, taskId); err != nil {
+			utils.Logger.Err(err).Msg("Error updating audit table")
+			c.JSON(http.StatusInternalServerError, "Error updating audit table")
+			return
+		}
 	} else {
 		c.AbortWithStatus(http.StatusUnauthorized)
 	}
