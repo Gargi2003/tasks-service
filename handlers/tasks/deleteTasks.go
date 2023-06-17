@@ -21,7 +21,7 @@ import (
 // @Failure 401 {string} string "Unauthorized"
 // @Failure 404 {string} string "Task not found"
 // @Failure 500 {string} string "Internal Server Error"
-// @Router /tasks [delete]
+// @Router /tasks/delete [delete]
 func DeleteTask(c *gin.Context) {
 	tokenString, err := c.Cookie("Authorization")
 	if err != nil {

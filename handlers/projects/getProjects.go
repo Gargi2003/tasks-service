@@ -22,7 +22,7 @@ type GetProject struct {
 // @Param Authorization header string true "Authorization token"
 // @Success 200 {object} []GetProject
 // @Failure 500 {string} string "Internal Server Error"
-// @Router /projects [get]
+// @Router /projects/list [get]
 func ListProjects(c *gin.Context) {
 
 	// Connect to the db
@@ -64,7 +64,7 @@ func ListProjects(c *gin.Context) {
 // @Success 200 {object} GetProject
 // @Failure 404 {string} string "No project found with the project ID"
 // @Failure 500 {string} string "Internal Server Error"
-// @Router /projects/{id} [get]
+// @Router /projects/get [get]
 func GetProjectById(c *gin.Context) {
 
 	// Connect to the db
@@ -82,10 +82,14 @@ func GetProjectById(c *gin.Context) {
 	}
 
 	project := GetProject{}
-	err1 := rows.Scan(&project.Name)
-	if err1 != nil {
-		utils.Logger.Err(err).Msg("Error unmarshalling into struct from db")
+	for rows.Next() {
+		err1 := rows.Scan(&project.Name)
+		if err1 != nil {
+			utils.Logger.Err(err1).Msg("Error unmarshalling into struct from db")
+			c.JSON(http.StatusInternalServerError, "Error unmarshalling into struct from db")
+			return
+		}
 	}
 
-	c.JSON(http.StatusOK, project)
+	c.JSON(http.StatusOK, project.Name)
 }

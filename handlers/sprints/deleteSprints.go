@@ -19,7 +19,7 @@ import (
 // @Failure 400 {string} string "Error occurred while executing query"
 // @Failure 404 {string} string "No sprint found with the sprintid"
 // @Failure 500 {string} string "Internal Server Error"
-// @Router /sprints [delete]
+// @Router /sprints/delete [delete]
 func DeleteSprint(c *gin.Context) {
 
 	//connect to db

@@ -26,7 +26,7 @@ type UpdateSprintRequest struct {
 // @Success 200 {string} string "Sprint updated successfully"
 // @Failure 400 {string} string "Error binding req object"
 // @Failure 500 {string} string "Error updating sprint"
-// @Router /sprints/{id} [put]
+// @Router /sprints/edit [put]
 func EditSprint(c *gin.Context) {
 	// Connect to the database
 	db, err := utils.DBConn(utils.Username, utils.Password, utils.Dbname, utils.Port)

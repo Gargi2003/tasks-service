@@ -80,7 +80,7 @@ func ListTasks(c *gin.Context) {
 // @Success 200 {object} utils.Task "Fetch tasks"
 // @Failure 401 {string} string "Unauthorized"
 // @Failure 500 {string} string "Internal Server Error"
-// @Router /tasks [get]
+// @Router /tasks/get [get]
 func GetTask(c *gin.Context) {
 	// Connect to the db
 	db, err := utils.DBConn(utils.Username, utils.Password, utils.Dbname, utils.Port)

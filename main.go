@@ -29,12 +29,14 @@ func main() {
 	//sprints api
 	router.POST("/sprints", sprintHandler.CreateSprint)
 	router.GET("/sprints/list", sprintHandler.ListSprints)
+	router.GET("/sprints/get", sprintHandler.GetSprintById)
 	router.DELETE("/sprints/delete", sprintHandler.DeleteSprint)
 	router.PUT("/sprints/edit", sprintHandler.EditSprint)
 
 	//projects api
 	router.POST("/projects", projectHandler.CreateProject)
 	router.GET("/projects/list", projectHandler.ListProjects)
+	router.GET("/projects/get", projectHandler.GetProjectById)
 	router.DELETE("/projects/delete", projectHandler.DeleteProject)
 	router.PUT("/projects/edit", projectHandler.EditProject)
 
