@@ -9,8 +9,6 @@ import (
 	"os"
 	utils "tasks/common"
 	"time"
-
-	"github.com/davecgh/go-spew/spew"
 )
 
 const (
@@ -52,7 +50,7 @@ func SendEmailForCreatedIssue(req interface{}) {
 		utils.Logger.Err(err).Msg("Error unmarshaling req object")
 		return
 	}
-	convertedTask := &utils.UpdateResponse{
+	convertedTask := &utils.Task{
 		Title:       request.Title,
 		Description: request.Description,
 		Status:      request.Status,
@@ -85,7 +83,7 @@ func ParseTemplate(fileName string, request interface{}) (string, error) {
 }
 
 // Helper function to compare two tasks
-func isTaskEqual(task1 *utils.UpdateResponse, task2 *utils.UpdateResponse) bool {
+func isTaskEqual(task1 *utils.Task, task2 *utils.Task) bool {
 	// Implement the comparison logic based on your requirements
 	// Compare the relevant fields to determine if the tasks are the same or different
 	return task1.Title == task2.Title &&
@@ -100,8 +98,8 @@ func isTaskEqual(task1 *utils.UpdateResponse, task2 *utils.UpdateResponse) bool 
 		task1.Comments == task2.Comments
 }
 
-func SendEmailForUpdatedIssue(previousTask *utils.UpdateResponse, updatedTask *utils.UpdateResponse) {
-	spew.Dump("Previous", previousTask)
+func SendEmailForUpdatedIssue(previousTask *utils.Task, updatedTask *utils.Task) {
+	// spew.Dump("Previous", previousTask)
 	updatedTask.PreviousFields = make(map[string]interface{})
 	fileName := "./service/updateTemplate.html"
 	updatedTask.Count = 0
@@ -116,11 +114,11 @@ func SendEmailForUpdatedIssue(previousTask *utils.UpdateResponse, updatedTask *u
 	utils.Logger.Info().Msg("Email sent successfully!")
 }
 
-func sendMail(updatedTask *utils.UpdateResponse, fileName string) {
+func sendMail(updatedTask *utils.Task, fileName string) {
 	subject := "Subject: [TASK NINJA] Updates for " + updatedTask.IssueType + ": " + updatedTask.Title + "\n"
 	mime := "MIME-version: 1.0;\nContent-Type: text/html; charset=\"UTF-8\";\n\n"
 	updatedTask.Timestamp = time.Now()
-	spew.Dump("Updated", updatedTask)
+	// spew.Dump("Updated", updatedTask)
 
 	body, err := ParseTemplate(fileName, updatedTask)
 	if err != nil {
@@ -136,7 +134,7 @@ func sendMail(updatedTask *utils.UpdateResponse, fileName string) {
 	}
 }
 
-func findCount(previousTask *utils.UpdateResponse, updatedTask *utils.UpdateResponse) {
+func findCount(previousTask *utils.Task, updatedTask *utils.Task) {
 	// Track the updated fields and their values
 	if previousTask.Title != updatedTask.Title {
 		updatedTask.PreviousFields["Title"] = map[string]interface{}{
