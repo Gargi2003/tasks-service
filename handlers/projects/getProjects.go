@@ -13,6 +13,16 @@ type GetProject struct {
 }
 
 // lists down all projects associated with the logged-in user
+// ListProjects godoc
+// @Summary List all projects
+// @Description Get a list of all projects associated with the logged-in user
+// @Tags Projects
+// @Accept json
+// @Produce json
+// @Param Authorization header string true "Authorization token"
+// @Success 200 {object} []GetProject
+// @Failure 500 {string} string "Internal Server Error"
+// @Router /projects [get]
 func ListProjects(c *gin.Context) {
 
 	// Connect to the db
@@ -43,7 +53,18 @@ func ListProjects(c *gin.Context) {
 	c.JSON(http.StatusOK, projects)
 }
 
-// lists down all projects associated with the logged-in user
+// GetProjectById godoc
+// @Summary Get a project by ID
+// @Description Get a project by its ID
+// @Tags Projects
+// @Accept json
+// @Produce json
+// @Param Authorization header string true "Authorization token"
+// @Param id query string true "Project ID"
+// @Success 200 {object} GetProject
+// @Failure 404 {string} string "No project found with the project ID"
+// @Failure 500 {string} string "Internal Server Error"
+// @Router /projects/{id} [get]
 func GetProjectById(c *gin.Context) {
 
 	// Connect to the db

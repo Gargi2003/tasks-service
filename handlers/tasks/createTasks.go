@@ -13,6 +13,28 @@ import (
 	"github.com/golang-jwt/jwt"
 )
 
+// CreateTasks godoc
+// @Summary Create a new task
+// @Description Create a new task for the logged-in user
+// @Tags Tasks
+// @Accept  json
+// @Produce  json
+// @Param Authorization header string true "Authorization token"
+// @Param title formData string true "Title of the task"
+// @Param description formData string false "Description of the task"
+// @Param issue_type formData string true "Type of the task (e.g., bug, feature)"
+// @Param assignee formData string true "Assignee of the task"
+// @Param sprint formData int false "ID of the sprint the task belongs to"
+// @Param project_id formData int false "ID of the project the task belongs to"
+// @Param points formData int false "Points/effort estimation for the task"
+// @Param reporter formData string true "Reporter of the task"
+// @Param comments formData string false "Additional comments for the task"
+// @Param status formData string false "Status of the task"
+// @Success 200 {string} string "Task created successfully"
+// @Failure 400 {string} string "Bad request"
+// @Failure 401 {string} string "Unauthorized"
+// @Failure 500 {string} string "Internal Server Error"
+// @Router /tasks [post]
 func CreateTasks(c *gin.Context) {
 
 	//get the jwt token from the cookie

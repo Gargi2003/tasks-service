@@ -11,6 +11,19 @@ type UpdateProjectRequest struct {
 	Name string `json:"name"`
 }
 
+// EditProject godoc
+// @Summary Update a project
+// @Description Update a project by its ID
+// @Tags Projects
+// @Accept json
+// @Produce json
+// @Param Authorization header string true "Authorization token"
+// @Param id query string true "Project ID"
+// @Param body body UpdateProjectRequest true "Update project request body"
+// @Success 200 {string} string "Project updated successfully"
+// @Failure 400 {string} string "Error binding req object"
+// @Failure 500 {string} string "Error updating project"
+// @Router /projects/{id} [put]
 func EditProject(c *gin.Context) {
 	// Connect to the database
 	db, err := utils.DBConn(utils.Username, utils.Password, utils.Dbname, utils.Port)

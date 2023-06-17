@@ -16,6 +16,17 @@ type GetSprint struct {
 }
 
 // lists down all sprints associated with the logged-in user
+
+// ListSprints godoc
+// @Summary List all sprints
+// @Description Lists down all sprints associated with the logged-in user
+// @Tags Sprints
+// @Accept json
+// @Produce json
+// @Param Authorization header string true "Authorization token"
+// @Success 200 {array} GetSprint
+// @Failure 500 {string} string "Internal Server Error"
+// @Router /sprints [get]
 func ListSprints(c *gin.Context) {
 
 	// Connect to the db
@@ -49,7 +60,17 @@ func ListSprints(c *gin.Context) {
 	c.JSON(http.StatusOK, sprints)
 }
 
-// lists down all sprints associated with the logged-in user
+// GetSprintById godoc
+// @Summary Get a sprint by ID
+// @Description Get a sprint by its ID
+// @Tags Sprints
+// @Accept json
+// @Produce json
+// @Param Authorization header string true "Authorization token"
+// @Param id query string true "Sprint ID"
+// @Success 200 {array} GetSprint
+// @Failure 500 {string} string "Internal Server Error"
+// @Router /sprints/{id} [get]
 func GetSprintById(c *gin.Context) {
 
 	// Connect to the db

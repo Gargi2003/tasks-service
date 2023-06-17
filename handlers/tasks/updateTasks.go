@@ -11,6 +11,18 @@ import (
 	"github.com/golang-jwt/jwt"
 )
 
+// EditTasks updates a task with the provided details.
+// @Summary Edit Task
+// @Description Update a task with the provided details
+// @Tags Tasks
+// @Accept json
+// @Produce json
+// @Param Authorization header string true "Authorization token"
+// @Param id query string true "Task ID"
+// @Success 200 {string} string "Tasks updated successfully"
+// @Failure 401 {string} string "Unauthorized"
+// @Failure 500 {string} string "Internal Server Error"
+// @Router /tasks [put]
 func EditTasks(c *gin.Context) {
 	tokenString, err := c.Cookie("Authorization")
 	if err != nil {

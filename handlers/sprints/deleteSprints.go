@@ -7,7 +7,19 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// lists down all tasks associated with the loggedin user
+// DeleteSprint godoc
+// @Summary Delete a sprint
+// @Description Delete a sprint by its ID
+// @Tags Sprints
+// @Accept json
+// @Produce json
+// @Param Authorization header string true "Authorization token"
+// @Param id query string true "Sprint ID"
+// @Success 200 {string} string "Sprint Deleted !!!"
+// @Failure 400 {string} string "Error occurred while executing query"
+// @Failure 404 {string} string "No sprint found with the sprintid"
+// @Failure 500 {string} string "Internal Server Error"
+// @Router /sprints [delete]
 func DeleteSprint(c *gin.Context) {
 
 	//connect to db

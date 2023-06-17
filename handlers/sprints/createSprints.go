@@ -14,6 +14,18 @@ type CreateSprintRequest struct {
 	ProjectID int    `json:"project_id"`
 }
 
+// CreateSprint godoc
+// @Summary Create a new sprint
+// @Description Create a new sprint for a project
+// @Tags Sprints
+// @Accept json
+// @Produce json
+// @Param Authorization header string true "Authorization token"
+// @Param req body CreateSprintRequest true "Sprint details"
+// @Success 200 {string} string "Sprint created successfully!"
+// @Failure 400 {string} string "Error executing db query"
+// @Failure 500 {string} string "Internal Server Error"
+// @Router /sprints [post]
 func CreateSprint(c *gin.Context) {
 
 	//bind the request to the struct

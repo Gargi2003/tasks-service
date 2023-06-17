@@ -14,6 +14,19 @@ type UpdateSprintRequest struct {
 	ProjectID int    `json:"project_id"`
 }
 
+// EditSprint godoc
+// @Summary Edit a sprint
+// @Description Edit a sprint by its ID
+// @Tags Sprints
+// @Accept json
+// @Produce json
+// @Param Authorization header string true "Authorization token"
+// @Param id query string true "Sprint ID"
+// @Param sprint body UpdateSprintRequest true "Sprint details"
+// @Success 200 {string} string "Sprint updated successfully"
+// @Failure 400 {string} string "Error binding req object"
+// @Failure 500 {string} string "Error updating sprint"
+// @Router /sprints/{id} [put]
 func EditSprint(c *gin.Context) {
 	// Connect to the database
 	db, err := utils.DBConn(utils.Username, utils.Password, utils.Dbname, utils.Port)
