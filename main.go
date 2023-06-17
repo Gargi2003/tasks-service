@@ -1,15 +1,24 @@
 package main
 
 import (
+	_ "tasks/docs"
 	projectHandler "tasks/handlers/projects"
 	sprintHandler "tasks/handlers/sprints"
 	taskhandler "tasks/handlers/tasks"
 
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
+// @title Tasks Service
+// @description Tasks API in go using gin-framework
+// @version 1.0
+// @host localhost:8081
+// @BasePath /api
 func main() {
 	router := gin.Default()
+	router.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	//tasks api
 	router.POST("/tasks", taskhandler.CreateTasks)
 	router.GET("/tasks/list", taskhandler.ListTasks)

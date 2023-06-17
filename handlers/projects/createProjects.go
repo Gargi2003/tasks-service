@@ -11,6 +11,18 @@ type CreateProjectRequest struct {
 	Name string `json:"name"`
 }
 
+// CreateProject godoc
+// @Summary Create a new project
+// @Description Create a new project
+// @Tags Projects
+// @Accept json
+// @Produce json
+// @Param Authorization header string true "Authorization token"
+// @Param project body CreateProjectRequest true "Project details"
+// @Success 200 {string} string "Project created successfully"
+// @Failure 400 {string} string "Error binding req object"
+// @Failure 500 {string} string "Error executing db query"
+// @Router /projects [post]
 func CreateProject(c *gin.Context) {
 
 	//bind the request to the struct

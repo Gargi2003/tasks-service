@@ -7,7 +7,18 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// lists down all tasks associated with the loggedin user
+// DeleteProject godoc
+// @Summary Delete a project
+// @Description Delete a project by ID
+// @Tags Projects
+// @Accept json
+// @Produce json
+// @Param Authorization header string true "Authorization token"
+// @Param id query string true "Project ID"
+// @Success 200 {string} string "Project Deleted !!!"
+// @Failure 404 {string} string "No project found with the project ID"
+// @Failure 500 {string} string "Internal Server Error"
+// @Router /projects [delete]
 func DeleteProject(c *gin.Context) {
 
 	//connect to db

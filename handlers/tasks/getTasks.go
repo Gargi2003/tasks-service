@@ -10,7 +10,17 @@ import (
 	"github.com/golang-jwt/jwt"
 )
 
-// lists down all tasks associated with the logged-in user
+// ListTasks godoc
+// @Summary List tasks
+// @Description List all tasks for the logged-in user
+// @Tags Tasks
+// @Accept  json
+// @Produce  json
+// @Param Authorization header string true "Authorization token"
+// @Success 200 {array} utils.Task "List of tasks"
+// @Failure 401 {string} string "Unauthorized"
+// @Failure 500 {string} string "Internal Server Error"
+// @Router /tasks/list [get]
 func ListTasks(c *gin.Context) {
 	tokenString, err := c.Cookie("Authorization")
 	if err != nil {
@@ -60,7 +70,17 @@ func ListTasks(c *gin.Context) {
 	c.JSON(http.StatusOK, tasks)
 }
 
-// Fetches a task by userId and taskId
+// GetTasks godoc
+// @Summary Get tasks
+// @Description Get all tasks for the logged-in user
+// @Tags Tasks
+// @Accept  json
+// @Produce  json
+// @Param Authorization header string true "Authorization token"
+// @Success 200 {object} utils.Task "Fetch tasks"
+// @Failure 401 {string} string "Unauthorized"
+// @Failure 500 {string} string "Internal Server Error"
+// @Router /tasks [get]
 func GetTask(c *gin.Context) {
 	// Connect to the db
 	db, err := utils.DBConn(utils.Username, utils.Password, utils.Dbname, utils.Port)

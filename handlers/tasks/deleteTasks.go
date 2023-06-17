@@ -9,7 +9,19 @@ import (
 	"github.com/golang-jwt/jwt"
 )
 
-// lists down all tasks associated with the loggedin user
+// DeleteTask godoc
+// @Summary Delete a task
+// @Description Delete a task for the logged-in user
+// @Tags Tasks
+// @Accept  json
+// @Produce  json
+// @Param Authorization header string true "Authorization token"
+// @Param id query string true "ID of the task to delete"
+// @Success 200 {string} string "Task deleted successfully"
+// @Failure 401 {string} string "Unauthorized"
+// @Failure 404 {string} string "Task not found"
+// @Failure 500 {string} string "Internal Server Error"
+// @Router /tasks [delete]
 func DeleteTask(c *gin.Context) {
 	tokenString, err := c.Cookie("Authorization")
 	if err != nil {
