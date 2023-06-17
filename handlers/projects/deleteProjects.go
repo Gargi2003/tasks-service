@@ -18,7 +18,7 @@ import (
 // @Success 200 {string} string "Project Deleted !!!"
 // @Failure 404 {string} string "No project found with the project ID"
 // @Failure 500 {string} string "Internal Server Error"
-// @Router /projects [delete]
+// @Router /projects/delete [delete]
 func DeleteProject(c *gin.Context) {
 
 	//connect to db

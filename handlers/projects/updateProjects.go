@@ -23,7 +23,7 @@ type UpdateProjectRequest struct {
 // @Success 200 {string} string "Project updated successfully"
 // @Failure 400 {string} string "Error binding req object"
 // @Failure 500 {string} string "Error updating project"
-// @Router /projects/{id} [put]
+// @Router /projects/edit [put]
 func EditProject(c *gin.Context) {
 	// Connect to the database
 	db, err := utils.DBConn(utils.Username, utils.Password, utils.Dbname, utils.Port)

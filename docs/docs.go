@@ -17,45 +17,6 @@ const docTemplate = `{
     "basePath": "{{.BasePath}}",
     "paths": {
         "/projects": {
-            "get": {
-                "description": "Get a list of all projects associated with the logged-in user",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Projects"
-                ],
-                "summary": "List all projects",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Authorization token",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/handlers.GetProject"
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            },
             "post": {
                 "description": "Create a new project",
                 "consumes": [
@@ -106,7 +67,9 @@ const docTemplate = `{
                         }
                     }
                 }
-            },
+            }
+        },
+        "/projects/delete": {
             "delete": {
                 "description": "Delete a project by ID",
                 "consumes": [
@@ -157,56 +120,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/projects/{id}": {
-            "get": {
-                "description": "Get a project by its ID",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Projects"
-                ],
-                "summary": "Get a project by ID",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Authorization token",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "Project ID",
-                        "name": "id",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/handlers.GetProject"
-                        }
-                    },
-                    "404": {
-                        "description": "No project found with the project ID",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            },
+        "/projects/edit": {
             "put": {
                 "description": "Update a project by its ID",
                 "consumes": [
@@ -266,9 +180,9 @@ const docTemplate = `{
                 }
             }
         },
-        "/sprints": {
+        "/projects/get": {
             "get": {
-                "description": "Lists down all sprints associated with the logged-in user",
+                "description": "Get a project by its ID",
                 "consumes": [
                     "application/json"
                 ],
@@ -276,9 +190,60 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Sprints"
+                    "Projects"
                 ],
-                "summary": "List all sprints",
+                "summary": "Get a project by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authorization token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Project ID",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.GetProject"
+                        }
+                    },
+                    "404": {
+                        "description": "No project found with the project ID",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/projects/list": {
+            "get": {
+                "description": "Get a list of all projects associated with the logged-in user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Projects"
+                ],
+                "summary": "List all projects",
                 "parameters": [
                     {
                         "type": "string",
@@ -294,7 +259,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/handlers.GetSprint"
+                                "$ref": "#/definitions/handlers.GetProject"
                             }
                         }
                     },
@@ -305,7 +270,9 @@ const docTemplate = `{
                         }
                     }
                 }
-            },
+            }
+        },
+        "/sprints": {
             "post": {
                 "description": "Create a new sprint for a project",
                 "consumes": [
@@ -356,7 +323,9 @@ const docTemplate = `{
                         }
                     }
                 }
-            },
+            }
+        },
+        "/sprints/delete": {
             "delete": {
                 "description": "Delete a sprint by its ID",
                 "consumes": [
@@ -413,53 +382,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/sprints/{id}": {
-            "get": {
-                "description": "Get a sprint by its ID",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Sprints"
-                ],
-                "summary": "Get a sprint by ID",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Authorization token",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "Sprint ID",
-                        "name": "id",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/handlers.GetSprint"
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            },
+        "/sprints/edit": {
             "put": {
                 "description": "Edit a sprint by its ID",
                 "consumes": [
@@ -519,9 +442,9 @@ const docTemplate = `{
                 }
             }
         },
-        "/tasks": {
+        "/sprints/get": {
             "get": {
-                "description": "Get all tasks for the logged-in user",
+                "description": "Get a sprint by its ID",
                 "consumes": [
                     "application/json"
                 ],
@@ -529,51 +452,9 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Tasks"
+                    "Sprints"
                 ],
-                "summary": "Get tasks",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Authorization token",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Fetch tasks",
-                        "schema": {
-                            "$ref": "#/definitions/common.Task"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            },
-            "put": {
-                "description": "Update a task with the provided details",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Tasks"
-                ],
-                "summary": "Edit Task",
+                "summary": "Get a sprint by ID",
                 "parameters": [
                     {
                         "type": "string",
@@ -584,7 +465,7 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "Task ID",
+                        "description": "Sprint ID",
                         "name": "id",
                         "in": "query",
                         "required": true
@@ -592,15 +473,12 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "Tasks updated successfully",
+                        "description": "OK",
                         "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "type": "string"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/handlers.GetSprint"
+                            }
                         }
                     },
                     "500": {
@@ -610,7 +488,50 @@ const docTemplate = `{
                         }
                     }
                 }
-            },
+            }
+        },
+        "/sprints/list": {
+            "get": {
+                "description": "Lists down all sprints associated with the logged-in user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Sprints"
+                ],
+                "summary": "List all sprints",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authorization token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/handlers.GetSprint"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/tasks": {
             "post": {
                 "description": "Create a new task for the logged-in user",
                 "consumes": [
@@ -722,7 +643,9 @@ const docTemplate = `{
                         }
                     }
                 }
-            },
+            }
+        },
+        "/tasks/delete": {
             "delete": {
                 "description": "Delete a task for the logged-in user",
                 "consumes": [
@@ -766,6 +689,101 @@ const docTemplate = `{
                     },
                     "404": {
                         "description": "Task not found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/tasks/edit": {
+            "put": {
+                "description": "Update a task with the provided details",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Tasks"
+                ],
+                "summary": "Edit Task",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authorization token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Task ID",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Tasks updated successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/tasks/get": {
+            "get": {
+                "description": "Get all tasks for the logged-in user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Tasks"
+                ],
+                "summary": "Get tasks",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authorization token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Fetch tasks",
+                        "schema": {
+                            "$ref": "#/definitions/common.Task"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "schema": {
                             "type": "string"
                         }

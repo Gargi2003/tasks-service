@@ -22,7 +22,7 @@ import (
 // @Success 200 {string} string "Tasks updated successfully"
 // @Failure 401 {string} string "Unauthorized"
 // @Failure 500 {string} string "Internal Server Error"
-// @Router /tasks [put]
+// @Router /tasks/edit [put]
 func EditTasks(c *gin.Context) {
 	tokenString, err := c.Cookie("Authorization")
 	if err != nil {

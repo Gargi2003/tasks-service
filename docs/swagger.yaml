@@ -98,65 +98,6 @@ info:
   version: "1.0"
 paths:
   /projects:
-    delete:
-      consumes:
-      - application/json
-      description: Delete a project by ID
-      parameters:
-      - description: Authorization token
-        in: header
-        name: Authorization
-        required: true
-        type: string
-      - description: Project ID
-        in: query
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Project Deleted !!!
-          schema:
-            type: string
-        "404":
-          description: No project found with the project ID
-          schema:
-            type: string
-        "500":
-          description: Internal Server Error
-          schema:
-            type: string
-      summary: Delete a project
-      tags:
-      - Projects
-    get:
-      consumes:
-      - application/json
-      description: Get a list of all projects associated with the logged-in user
-      parameters:
-      - description: Authorization token
-        in: header
-        name: Authorization
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            items:
-              $ref: '#/definitions/handlers.GetProject'
-            type: array
-        "500":
-          description: Internal Server Error
-          schema:
-            type: string
-      summary: List all projects
-      tags:
-      - Projects
     post:
       consumes:
       - application/json
@@ -191,11 +132,11 @@ paths:
       summary: Create a new project
       tags:
       - Projects
-  /projects/{id}:
-    get:
+  /projects/delete:
+    delete:
       consumes:
       - application/json
-      description: Get a project by its ID
+      description: Delete a project by ID
       parameters:
       - description: Authorization token
         in: header
@@ -211,9 +152,9 @@ paths:
       - application/json
       responses:
         "200":
-          description: OK
+          description: Project Deleted !!!
           schema:
-            $ref: '#/definitions/handlers.GetProject'
+            type: string
         "404":
           description: No project found with the project ID
           schema:
@@ -222,9 +163,10 @@ paths:
           description: Internal Server Error
           schema:
             type: string
-      summary: Get a project by ID
+      summary: Delete a project
       tags:
       - Projects
+  /projects/edit:
     put:
       consumes:
       - application/json
@@ -264,7 +206,103 @@ paths:
       summary: Update a project
       tags:
       - Projects
+  /projects/get:
+    get:
+      consumes:
+      - application/json
+      description: Get a project by its ID
+      parameters:
+      - description: Authorization token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Project ID
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.GetProject'
+        "404":
+          description: No project found with the project ID
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Get a project by ID
+      tags:
+      - Projects
+  /projects/list:
+    get:
+      consumes:
+      - application/json
+      description: Get a list of all projects associated with the logged-in user
+      parameters:
+      - description: Authorization token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/handlers.GetProject'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: List all projects
+      tags:
+      - Projects
   /sprints:
+    post:
+      consumes:
+      - application/json
+      description: Create a new sprint for a project
+      parameters:
+      - description: Authorization token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Sprint details
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.CreateSprintRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Sprint created successfully!
+          schema:
+            type: string
+        "400":
+          description: Error executing db query
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Create a new sprint
+      tags:
+      - Sprints
+  /sprints/delete:
     delete:
       consumes:
       - application/json
@@ -302,98 +340,7 @@ paths:
       summary: Delete a sprint
       tags:
       - Sprints
-    get:
-      consumes:
-      - application/json
-      description: Lists down all sprints associated with the logged-in user
-      parameters:
-      - description: Authorization token
-        in: header
-        name: Authorization
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            items:
-              $ref: '#/definitions/handlers.GetSprint'
-            type: array
-        "500":
-          description: Internal Server Error
-          schema:
-            type: string
-      summary: List all sprints
-      tags:
-      - Sprints
-    post:
-      consumes:
-      - application/json
-      description: Create a new sprint for a project
-      parameters:
-      - description: Authorization token
-        in: header
-        name: Authorization
-        required: true
-        type: string
-      - description: Sprint details
-        in: body
-        name: req
-        required: true
-        schema:
-          $ref: '#/definitions/handlers.CreateSprintRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Sprint created successfully!
-          schema:
-            type: string
-        "400":
-          description: Error executing db query
-          schema:
-            type: string
-        "500":
-          description: Internal Server Error
-          schema:
-            type: string
-      summary: Create a new sprint
-      tags:
-      - Sprints
-  /sprints/{id}:
-    get:
-      consumes:
-      - application/json
-      description: Get a sprint by its ID
-      parameters:
-      - description: Authorization token
-        in: header
-        name: Authorization
-        required: true
-        type: string
-      - description: Sprint ID
-        in: query
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            items:
-              $ref: '#/definitions/handlers.GetSprint'
-            type: array
-        "500":
-          description: Internal Server Error
-          schema:
-            type: string
-      summary: Get a sprint by ID
-      tags:
-      - Sprints
+  /sprints/edit:
     put:
       consumes:
       - application/json
@@ -433,18 +380,18 @@ paths:
       summary: Edit a sprint
       tags:
       - Sprints
-  /tasks:
-    delete:
+  /sprints/get:
+    get:
       consumes:
       - application/json
-      description: Delete a task for the logged-in user
+      description: Get a sprint by its ID
       parameters:
       - description: Authorization token
         in: header
         name: Authorization
         required: true
         type: string
-      - description: ID of the task to delete
+      - description: Sprint ID
         in: query
         name: id
         required: true
@@ -453,28 +400,23 @@ paths:
       - application/json
       responses:
         "200":
-          description: Task deleted successfully
+          description: OK
           schema:
-            type: string
-        "401":
-          description: Unauthorized
-          schema:
-            type: string
-        "404":
-          description: Task not found
-          schema:
-            type: string
+            items:
+              $ref: '#/definitions/handlers.GetSprint'
+            type: array
         "500":
           description: Internal Server Error
           schema:
             type: string
-      summary: Delete a task
+      summary: Get a sprint by ID
       tags:
-      - Tasks
+      - Sprints
+  /sprints/list:
     get:
       consumes:
       - application/json
-      description: Get all tasks for the logged-in user
+      description: Lists down all sprints associated with the logged-in user
       parameters:
       - description: Authorization token
         in: header
@@ -485,20 +427,19 @@ paths:
       - application/json
       responses:
         "200":
-          description: Fetch tasks
+          description: OK
           schema:
-            $ref: '#/definitions/common.Task'
-        "401":
-          description: Unauthorized
-          schema:
-            type: string
+            items:
+              $ref: '#/definitions/handlers.GetSprint'
+            type: array
         "500":
           description: Internal Server Error
           schema:
             type: string
-      summary: Get tasks
+      summary: List all sprints
       tags:
-      - Tasks
+      - Sprints
+  /tasks:
     post:
       consumes:
       - application/json
@@ -575,6 +516,45 @@ paths:
       summary: Create a new task
       tags:
       - Tasks
+  /tasks/delete:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a task for the logged-in user
+      parameters:
+      - description: Authorization token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: ID of the task to delete
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Task deleted successfully
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "404":
+          description: Task not found
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Delete a task
+      tags:
+      - Tasks
+  /tasks/edit:
     put:
       consumes:
       - application/json
@@ -606,6 +586,35 @@ paths:
           schema:
             type: string
       summary: Edit Task
+      tags:
+      - Tasks
+  /tasks/get:
+    get:
+      consumes:
+      - application/json
+      description: Get all tasks for the logged-in user
+      parameters:
+      - description: Authorization token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Fetch tasks
+          schema:
+            $ref: '#/definitions/common.Task'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Get tasks
       tags:
       - Tasks
   /tasks/list:
