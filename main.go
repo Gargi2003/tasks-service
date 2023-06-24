@@ -22,9 +22,11 @@ func main() {
 	//tasks api
 	router.POST("/tasks", taskhandler.CreateTasks)
 	router.GET("/tasks/list", taskhandler.ListTasks)
-	router.GET("/tasks/get", taskhandler.GetTask)
+	router.GET("/tasks/get", taskhandler.GetTaskByUseridAndTaskId)
 	router.DELETE("/tasks/delete", taskhandler.DeleteTask)
 	router.PUT("/tasks/edit", taskhandler.EditTasks)
+	router.GET("/tasks/getByProjectId", taskhandler.GetTaskByProjectId)
+	router.GET("/tasks/getByUserId", taskhandler.GetTaskByUserId)
 
 	//sprints api
 	router.POST("/sprints", sprintHandler.CreateSprint)

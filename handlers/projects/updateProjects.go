@@ -8,7 +8,9 @@ import (
 )
 
 type UpdateProjectRequest struct {
-	Name string `json:"name"`
+	Name        string `json:"name"`
+	Project_Key string `json:"project_key"`
+	Lead        string `json:"leader"`
 }
 
 // EditProject godoc
@@ -48,7 +50,14 @@ func EditProject(c *gin.Context) {
 		updateQuery += " name=?,"
 		queryParams = append(queryParams, req.Name)
 	}
-
+	if req.Project_Key != "" {
+		updateQuery += " project_key=?,"
+		queryParams = append(queryParams, req.Project_Key)
+	}
+	if req.Lead != "" {
+		updateQuery += " leader=?,"
+		queryParams = append(queryParams, req.Lead)
+	}
 	updateQuery = updateQuery[:len(updateQuery)-1]
 
 	// Add the WHERE condition
