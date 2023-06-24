@@ -45,6 +45,7 @@ func DeleteTask(c *gin.Context) {
 		taskId := c.Query("id")
 		rows, err := db.Exec("delete from tasks where user_id=? and id=?", userId, taskId)
 		if err != nil {
+			utils.Logger.Err(err).Msg("Error occurred while executing query")
 			c.JSON(http.StatusInternalServerError, "Error occurred while executing query")
 		}
 		result, err := rows.RowsAffected()

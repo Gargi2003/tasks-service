@@ -8,7 +8,10 @@ import (
 )
 
 type CreateProjectRequest struct {
-	Name string `json:"name"`
+	Name           string `json:"name"`
+	Project_Key    string `json:"project_key"`
+	Lead           string `json:"leader"`
+	Project_Avatar string `json:"project_avatar"`
 }
 
 // CreateProject godoc
@@ -40,7 +43,7 @@ func CreateProject(c *gin.Context) {
 	}
 	defer db.Close()
 
-	_, err1 := db.Query("INSERT INTO projects (name) VALUES(?)", req.Name)
+	_, err1 := db.Query("INSERT INTO projects (name,project_key,leader,project_avatar) VALUES(?, ?, ?, ?)", req.Name, req.Project_Key, req.Lead, req.Project_Avatar)
 	if err1 != nil {
 		utils.Logger.Err(err1).Msg("Error executing db query")
 		c.JSON(http.StatusBadRequest, "Error executing db query")

@@ -8,8 +8,11 @@ import (
 )
 
 type GetProject struct {
-	ID   int    `json:"id"`
-	Name string `json:"name"`
+	ID             int    `json:"id"`
+	Name           string `json:"name"`
+	Project_Key    string `json:"project_key"`
+	Lead           string `json:"leader"`
+	Project_Avatar string `json:"project_avatar"`
 }
 
 // lists down all projects associated with the logged-in user
@@ -32,7 +35,7 @@ func ListProjects(c *gin.Context) {
 	}
 	defer db.Close()
 	var projects []GetProject
-	rows, err := db.Query("SELECT id, name from projects")
+	rows, err := db.Query("SELECT id, name, project_key, leader, project_avatar from projects")
 	if err != nil {
 		utils.Logger.Err(err).Msg("Error occurred while executing query")
 		c.JSON(http.StatusInternalServerError, "Error occurred while executing query")
@@ -42,7 +45,7 @@ func ListProjects(c *gin.Context) {
 	for rows.Next() {
 		project := GetProject{}
 
-		err := rows.Scan(&project.ID, &project.Name)
+		err := rows.Scan(&project.ID, &project.Name, &project.Project_Key, &project.Lead, &project.Project_Avatar)
 		if err != nil {
 			utils.Logger.Err(err).Msg("Error unmarshalling into struct from db")
 		}
@@ -74,7 +77,7 @@ func GetProjectById(c *gin.Context) {
 	}
 	defer db.Close()
 	projectId := c.Query("id")
-	rows, err := db.Query("SELECT name from projects where id=?", projectId)
+	rows, err := db.Query("SELECT * from projects where id=?", projectId)
 	if err != nil {
 		utils.Logger.Err(err).Msg("Error occurred while executing query")
 		c.JSON(http.StatusInternalServerError, "Error occurred while executing query")
@@ -83,7 +86,7 @@ func GetProjectById(c *gin.Context) {
 
 	project := GetProject{}
 	for rows.Next() {
-		err1 := rows.Scan(&project.Name)
+		err1 := rows.Scan(&project.ID, &project.Name, &project.Project_Key, &project.Lead, &project.Project_Avatar)
 		if err1 != nil {
 			utils.Logger.Err(err1).Msg("Error unmarshalling into struct from db")
 			c.JSON(http.StatusInternalServerError, "Error unmarshalling into struct from db")
@@ -91,5 +94,5 @@ func GetProjectById(c *gin.Context) {
 		}
 	}
 
-	c.JSON(http.StatusOK, project.Name)
+	c.JSON(http.StatusOK, project)
 }
