@@ -2,6 +2,7 @@ package main
 
 import (
 	_ "tasks/docs"
+	auditHandler "tasks/handlers/audits"
 	projectHandler "tasks/handlers/projects"
 	sprintHandler "tasks/handlers/sprints"
 	taskhandler "tasks/handlers/tasks"
@@ -41,6 +42,9 @@ func main() {
 	router.GET("/projects/get", projectHandler.GetProjectById)
 	router.DELETE("/projects/delete", projectHandler.DeleteProject)
 	router.PUT("/projects/edit", projectHandler.EditProject)
+
+	//audits api
+	router.GET("/audit/list", auditHandler.ListAudits)
 
 	router.Run(":8081")
 }
