@@ -53,11 +53,12 @@ type Tasks_Audit struct {
 }
 
 const (
-	Username   = "root"
-	Password   = "Dell0SS!"
-	Dbname     = "todo_manager"
-	Topology   = "tcp"
-	Port       = "localhost:3306"
+	Username = "root"
+	Password = "Dell0SS!"
+	Dbname   = "todo_manager"
+	Topology = "tcp"
+	// Port       = "tasks-service-db-1:3306"
+	Port       = "host.docker.internal:3306"
 	DriverName = "mysql"
 	SecretKey  = "khsiudjsb12jhb4!"
 )
@@ -82,6 +83,7 @@ func ConstructURL(user string, password string, dbname string, port string) stri
 	sb.WriteString("@")
 	sb.WriteString(Topology)
 	sb.WriteString("(")
+	// sb.WriteString("db")
 	sb.WriteString(port)
 	sb.WriteString(")")
 	sb.WriteString("/")

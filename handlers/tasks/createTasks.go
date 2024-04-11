@@ -68,7 +68,7 @@ func CreateTasks(c *gin.Context) {
 	//extract the user id associated with the current session
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
 		userId := claims["sub"]
-		url := fmt.Sprint("http://localhost:8080/users/get?id=", userId)
+		url := fmt.Sprint("http://users-service:8080/users/get?id=", userId)
 		response, err := http.Get(url)
 		if err != nil {
 			utils.Logger.Err(err).Msg("Error calling users API")

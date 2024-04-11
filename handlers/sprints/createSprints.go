@@ -3,6 +3,7 @@ package handlers
 import (
 	"net/http"
 	utils "tasks/common"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -41,10 +42,13 @@ func CreateSprint(c *gin.Context) {
 		utils.Logger.Err(err).Msg("Couldn't establish db connection")
 	}
 	defer db.Close()
+	startDate, err := time.Parse("2006-01-02", req.StartDate)
+	endDate := startDate.AddDate(0, 0, 15).Format("2006-01-02")
 
-	_, err1 := db.Query("INSERT INTO sprints (name, start_date, end_date, project_id) VALUES (?, ?, ?, ?)", req.Name, req.StartDate, req.EndDate, req.ProjectID)
+	req.EndDate = req.StartDate
+	_, err1 := db.Query("INSERT INTO sprints (name, start_date, end_date, project_id) VALUES (?, ?, ?, ?)", req.Name, req.StartDate, endDate, req.ProjectID)
 	if err1 != nil {
-		utils.Logger.Err(err).Msg("Error executing db query")
+		utils.Logger.Err(err1).Msg("Error executing db query")
 		c.JSON(http.StatusBadRequest, "Error executing db query")
 	}
 
