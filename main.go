@@ -27,6 +27,7 @@ func main() {
 	router.DELETE("/tasks/delete", taskhandler.DeleteTask)
 	router.PUT("/tasks/edit", taskhandler.EditTasks)
 	router.GET("/tasks/getByProjectId", taskhandler.GetTaskByProjectId)
+	router.GET("/tasks/getBySprintId", taskhandler.GetTaskBySprintIdandProjectId)
 	router.GET("/tasks/getByUserId", taskhandler.GetTaskByUserId)
 
 	//sprints api
@@ -35,6 +36,8 @@ func main() {
 	router.GET("/sprints/get", sprintHandler.GetSprintById)
 	router.DELETE("/sprints/delete", sprintHandler.DeleteSprint)
 	router.PUT("/sprints/edit", sprintHandler.EditSprint)
+	router.GET("/sprints/getByProjectId", sprintHandler.GetSprintByProjectId)
+	router.GET("/sprints/getByProjectName", sprintHandler.GetSprintsByProjectName)
 
 	//projects api
 	router.POST("/projects", projectHandler.CreateProject)
