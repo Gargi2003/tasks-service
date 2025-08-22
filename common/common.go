@@ -53,8 +53,8 @@ type Tasks_Audit struct {
 }
 
 const (
-	[REDACTED_USERNAME]
-	[REDACTED_PASSWORD]
+	Username = "diya"
+	Password = "diyajgec!"
 	Dbname   = "todo_manager"
 	Topology = "tcp"
 	// Port       = "tasks-service-db-1:3306"
